@@ -6,4 +6,5 @@
     <string name="title_activity_slash">Slash</string>
     <string name="title_activity_splash">Splash</string>
     <string name="title_activity_about">AboutActivity</string>
+    <string name="title_activity_play">PlayActivity</string>
 </resources>
