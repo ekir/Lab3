@@ -1,41 +1,24 @@
 package com.example.ekir.lab3;
 
-import android.content.Intent;
-import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class Splash extends ActionBarActivity {
+public class AboutActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final int wait_time = 2000;
-        setContentView(R.layout.activity_splash);
-
-        Handler handler = new Handler();
-
-        handler.postDelayed(new Runnable() {
-            public void run() {
-
-                // make sure we close the splash screen so the user won't come back when it presses back key
-
-                finish();
-                Intent intent = new Intent(Splash.this, MainActivity.class);
-                Splash.this.startActivity(intent);
-            }
-
-        }, wait_time);
+        setContentView(R.layout.activity_about);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_splash, menu);
+        getMenuInflater().inflate(R.menu.menu_about, menu);
         return true;
     }
 
