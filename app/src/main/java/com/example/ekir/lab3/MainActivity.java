@@ -20,7 +20,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         final MediaPlayer MediaSpelaren = MediaPlayer.create(this, R.raw.music);
         MediaSpelaren.setLooping(true);
-        MediaSpelaren.start();
+        //MediaSpelaren.start();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btn_play= (Button) findViewById(R.id.btn_play);

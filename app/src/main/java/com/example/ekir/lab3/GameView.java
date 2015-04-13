@@ -18,15 +18,12 @@ import java.io.InputStream;
  */
 public abstract class GameView extends SurfaceView implements Runnable {
     SurfaceHolder surface;
-    Bitmap lion = null;
     volatile boolean game_paused = false;
     volatile boolean game_running = true;
-    int x = 0;
 
     public GameView(Context context) {
         super(context);
         surface = getHolder();
-        lion = load_bitmap("packman3.png",context);
         Thread gameloop = null;
         gameloop = new Thread(this);
         gameloop.start();
