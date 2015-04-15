@@ -7,6 +7,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -20,13 +22,17 @@ public abstract class GameView extends SurfaceView implements Runnable {
     SurfaceHolder surface;
     volatile boolean game_paused = false;
     volatile boolean game_running = true;
+    Context context;
+    SoundPool soundPool=null;
 
-    public GameView(Context context) {
-        super(context);
+    public GameView(Context tcontext) {
+        super(tcontext);
         surface = getHolder();
+        soundPool=new SoundPool(4, AudioManager.STREAM_MUSIC,0);
         Thread gameloop = null;
         gameloop = new Thread(this);
         gameloop.start();
+        context=tcontext;
     }
 
     Bitmap load_bitmap(String filename,Context context) {
@@ -65,9 +71,17 @@ public abstract class GameView extends SurfaceView implements Runnable {
                 continue;
             }
             Canvas canvas = surface.lockCanvas();
-            dogameloop(canvas);
+            gameLoop(canvas);
             surface.unlockCanvasAndPost(canvas);
         }
     }
-    public abstract void dogameloop(Canvas canvas);
+    public abstract void gameLoop(Canvas canvas);
+
+    public int load_sound(int resId) {
+        return soundPool.load(context,resId,1);
+    }
+
+    public void play_sound(int sound_id) {
+        soundPool.play(sound_id,1,1,1,0,1f);
+    }
 }

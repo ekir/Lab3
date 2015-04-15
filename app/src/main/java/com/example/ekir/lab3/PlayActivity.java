@@ -7,11 +7,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Rect;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -23,6 +27,7 @@ import java.util.Random;
 
 public class PlayActivity extends Activity {
     PackmanHunt drawView;
+    Point touch = new Point(0,0);
 
     @Override public void onPause() {
         super.onPause();
@@ -34,7 +39,7 @@ public class PlayActivity extends Activity {
         super.onCreate(savedInstanceState);
         drawView = new PackmanHunt(this);
         setContentView(drawView);
-
+        drawView.setOnTouchListener(drawView);
     }
 
     @Override public void onResume() {
@@ -51,10 +56,13 @@ public class PlayActivity extends Activity {
     class Packman {
         public int x;
         public int y;
+        public int width;
+        public int height;
         public int direction=0;
         public int speed=5;
         private Random rand = new Random();
-
+        GameView gameView;
+        int bounce_sound;
         public void act() {
             switch(direction) {
                 case 0:
@@ -86,16 +94,43 @@ public class PlayActivity extends Activity {
                     x=x-speed;
                     break;
             }
-        }
 
+            if(x<0) {
+                x=0;
+                rand_direction();
+                gameView.play_sound(bounce_sound);
+            }
+            if(y<0) {
+                y=0;
+                rand_direction();
+                gameView.play_sound(bounce_sound);
+            }
+            if(x>gameView.getWidth()-width) {
+                x=gameView.getWidth()-width;
+                rand_direction();
+                gameView.play_sound(bounce_sound);
+            }
+            if(y>gameView.getHeight()-height) {
+                y=gameView.getHeight()-height;
+                rand_direction();
+                gameView.play_sound(bounce_sound);
+            }
+
+        }
         public void rand_direction() {
             direction=rand.nextInt(7);
         }
+        public void rand_position() {
+            y=rand.nextInt(gameView.getHeight()-height);
+            x=rand.nextInt(gameView.getWidth()-width);
+        }
     }
 
-    class PackmanHunt extends GameView {
+    class PackmanHunt extends GameView implements View.OnTouchListener {
         Packman packman = new Packman();
         Bitmap packman_image[] = new Bitmap[8];
+        int bounce_sound;
+        int success_sound;
 
         public PackmanHunt(Context context) {
             super(context);
@@ -103,32 +138,34 @@ public class PlayActivity extends Activity {
                 packman_image[i]=load_bitmap("packman"+Integer.toString(i)+".png",context);
             }
             packman.direction=3;
+            success_sound=load_sound(R.raw.success);
+            packman.bounce_sound = load_sound(R.raw.bounce);
+            packman.width=100;
+            packman.height=100;
+            packman.gameView=this;
         }
 
         @Override
-        public void dogameloop(Canvas canvas) {
+        public boolean onTouch(View v, MotionEvent event) {
+            int touch_x=(int)event.getX();
+            int touch_y=(int)event.getY();
+            if(touch_x>packman.x && touch_y>packman.y && touch_x<packman.x+packman.width && touch_y <packman.y+packman.height) {
+                play_sound(success_sound);
+                packman.rand_position();
+
+            }
+            //packman.x=
+            //packman.y=
+
+            return true;
+        }
+
+        @Override
+        public void gameLoop(Canvas canvas) {
             canvas.drawColor(Color.RED);
-            canvas.drawBitmap(packman_image[packman.direction],null,new Rect(packman.x,packman.y,packman.x+100,packman.y+100),null);
+            canvas.drawBitmap(packman_image[packman.direction],null,new Rect(packman.x,packman.y,packman.x+packman.width,packman.y+packman.height),null);
 
             packman.act();
-
-            if(packman.x>canvas.getWidth()-100) {
-                packman.x=canvas.getWidth()-100;
-                packman.rand_direction();
-            }
-            if(packman.y>canvas.getHeight()-100) {
-                packman.y=canvas.getHeight()-100;
-                packman.rand_direction();
-            }
-            if(packman.x<0) {
-                packman.x=0;
-                packman.rand_direction();
-            }
-            if(packman.y<0) {
-                packman.y=0;
-                packman.rand_direction();
-            }
-
         }
     }
 
