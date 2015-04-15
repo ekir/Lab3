@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
+/**
+ * This activity handles the splash screen
+ */
 public class Splash extends ActionBarActivity {
 
     @Override

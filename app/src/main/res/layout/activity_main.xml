@@ -27,7 +27,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="About"
+        android:text="How to play"
         android:id="@+id/btn_about"
         android:layout_below="@+id/chk_music"
         android:layout_alignParentLeft="true"

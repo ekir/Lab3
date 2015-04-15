@@ -16,7 +16,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by ekir on 2015-04-13.
+ * This is the game engine class. It extends SurfaceView and hold the game thread
+ * This class is extended in the PackmanHunt class, which is the actuall game
  */
 public abstract class GameView extends SurfaceView implements Runnable {
     SurfaceHolder surface;
@@ -71,10 +72,14 @@ public abstract class GameView extends SurfaceView implements Runnable {
                 continue;
             }
             Canvas canvas = surface.lockCanvas();
+
+            // Call the game loop method
             gameLoop(canvas);
             surface.unlockCanvasAndPost(canvas);
         }
     }
+
+    // This function should hold the game loop
     public abstract void gameLoop(Canvas canvas);
 
     public int load_sound(int resId) {
